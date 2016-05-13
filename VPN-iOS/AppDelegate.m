@@ -50,7 +50,7 @@
 
 //进入主逻辑视图控制器
 - (void)createMainController {
-    //goto 开关用哪个？
+    //goto
     BOOL flag = [HLInterface sharedInstance].girl_start == 1;
     if (!flag) {
         //马甲入口
@@ -82,8 +82,9 @@
         [HLStartLogic start];
     } else {
         //产品入口
-        UIViewController *pageController = [[UIStoryboard storyboardWithName:@"VPN" bundle:nil] instantiateInitialViewController];
-        
+        BOOL flag = [HLAnalyst boolValue:@"vpn_favor_switch" defaultValue:YES];
+        UIViewController *pageController = (![VPNManager sharedManager].hasFavor && flag) ? [[UIStoryboard storyboardWithName:@"VPN" bundle:nil] instantiateInitialViewController] : [[UIStoryboard storyboardWithName:@"VPN" bundle:nil] instantiateViewControllerWithIdentifier:@"page"];
+
         [_rootNavigationController setViewControllers:@[pageController] animated:NO];
     }
 }
@@ -104,7 +105,9 @@
     _rootNavigationController = [[UINavigationController alloc] initWithRootViewController:loadingController];
     _rootNavigationController.navigationBarHidden = YES;
     self.window.rootViewController = _rootNavigationController;
-    [self performSelector:@selector(onLoadingFinish) withObject:nil afterDelay:8];
+    
+    //goto
+    [self performSelector:@selector(onLoadingFinish) withObject:nil afterDelay:8];//8];
     
 }
 
